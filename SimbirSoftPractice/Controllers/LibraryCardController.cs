@@ -13,9 +13,10 @@ namespace SimbirSoftPractice.Controllers
     public class LibraryCardController : ControllerBase
     {
         [HttpPost]
-        public void TakeABook([FromBody] LibraryCard libraryCard)
+        public IEnumerable<LibraryCard> TakeABook([FromBody] LibraryCard libraryCard)
         {
             FakeRepository.Cards.Add(libraryCard);
+            return FakeRepository.Cards;
         }
 
         [HttpGet]

@@ -18,8 +18,7 @@ namespace SimbirSoftPractice.Controllers
         {
             if (partOfFullName != null)
             {
-                return FakeRepository.Humans.Where(p => p.Name.Contains(partOfFullName) || p.Surname.Contains(partOfFullName) ||
-                                            (p.Patronymic != null && p.Patronymic.Contains(partOfFullName)));
+                return Human.FindAllByFullName(partOfFullName);
             }
             else
             {
@@ -36,9 +35,7 @@ namespace SimbirSoftPractice.Controllers
             {
                 foreach (var book in FakeRepository.Books)
                 {
-                    answer.AddRange(FakeRepository.Humans.Where(p => p.Id == book.AuthorId && !answer.Contains(p) &&
-                                                               (p.Name.Contains(partOfFullName) || p.Surname.Contains(partOfFullName) ||
-                                                               (p.Patronymic != null && p.Patronymic.Contains(partOfFullName)))));
+                    answer.AddRange(Human.FindAllByFullName(partOfFullName));
                 }
             }
             else

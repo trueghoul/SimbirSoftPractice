@@ -17,9 +17,9 @@ namespace SimbirSoftPractice
 
         public static List<Book> Books = new List<Book>
         {
-            new Book{Id = 1, AuthorId = 2, Tite = "Tokyo Ghoul", Genre = "Dark fantasy"},
-            new Book{Id = 2, AuthorId = 2, Tite = "Tokyo Ghoul:re", Genre = "Dark fantasy"},
-            new Book{Id = 3, AuthorId = 3, Tite = "Attack on titan", Genre = "thriller"}
+            new Book{Id = 1, AuthorId = 2, Title = "Tokyo Ghoul", Genre = "Dark fantasy"},
+            new Book{Id = 2, AuthorId = 2, Title = "Tokyo Ghoul:re", Genre = "Dark fantasy"},
+            new Book{Id = 3, AuthorId = 3, Title = "Attack on titan", Genre = "thriller"}
         };
 
         public static List<LibraryCard> Cards = new List<LibraryCard>();

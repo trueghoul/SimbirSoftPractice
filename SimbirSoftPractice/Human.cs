@@ -13,5 +13,11 @@ namespace SimbirSoftPractice
         public string Patronymic { get; set; }
         public DateTime Birhday { get; set; }
 
+        public static IEnumerable<Human> FindAllByFullName (string partOfFullName)
+        {
+            return FakeRepository.Humans.Where(p => p.Name.Contains(partOfFullName) || p.Surname.Contains(partOfFullName) ||
+                                            (p.Patronymic != null && p.Patronymic.Contains(partOfFullName)));
+        }
+
     }
 }
