@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using SimbirSoftPractice.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,8 @@ namespace SimbirSoftPractice
         {
 
             services.AddControllers();
+            services.AddDbContext<LibraryDBContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("LibraryDB")));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SimbirSoftPractice", Version = "v1" });

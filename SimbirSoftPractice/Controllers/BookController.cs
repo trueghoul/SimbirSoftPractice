@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SimbirSoftPractice.EF;
+using SimbirSoftPractice.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,26 +15,29 @@ namespace SimbirSoftPractice.Controllers
     public class BookController : ControllerBase
     {
 
-        [HttpGet]
-        public IEnumerable<Book> GetBooks([FromQuery] int? AuthorId)
+        private UnitOfWork unitOfWork;
+
+        public BookController(LibraryDBContext db)
         {
-            if (AuthorId != null)
-            {
-                return FakeRepository.Books.Where(p => p.AuthorId == AuthorId);
-            }
-            else return FakeRepository.Books;
+            unitOfWork = new UnitOfWork(db);
         }
 
-        [HttpPost]
+        [HttpGet]
+        public IEnumerable<Book> GetBooks()
+        {
+            return unitOfWork.Books.GetAll();
+        }
+
+        [HttpPost(template:"AddBook")]
         public void AddBook([FromBody] Book book)
         {
-            FakeRepository.Books.Add(book);
+
         }
 
         [HttpDelete]
         public void RemoveBook([FromQuery] int id)
         {
-            FakeRepository.Books.Remove(FakeRepository.Books.Find(p => p.Id == id));
+
         }
     }
 }
