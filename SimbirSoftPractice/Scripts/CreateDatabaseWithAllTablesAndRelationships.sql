@@ -12,10 +12,10 @@ GO
 
 CREATE TABLE [dbo].[person](
 	[id] [int] NOT NULL,
-	[birh_date] [date] NOT NULL,
-	[first_name] [nvarchar](50) NULL,
-	[last_name] [nvarchar](50) NULL,
-	[middle_name] [nchar](10) NOT NULL,
+	[birh_date] [date] NULL,
+	[first_name] [nvarchar](50) NOT NULL,
+	[last_name] [nvarchar](50) NOT NULL,
+	[middle_name] [nvarchar](50) NULL,
  CONSTRAINT [PK_person] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

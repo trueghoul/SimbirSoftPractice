@@ -155,18 +155,18 @@ namespace SimbirSoftPractice.EF
                     .HasColumnName("birh_date");
 
                 entity.Property(e => e.FirstName)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("first_name");
 
                 entity.Property(e => e.LastName)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("last_name");
 
                 entity.Property(e => e.MiddleName)
-                    .IsRequired()
-                    .HasMaxLength(10)
-                    .HasColumnName("middle_name")
-                    .IsFixedLength(true);
+                    .HasMaxLength(50)
+                    .HasColumnName("middle_name");
             });
 
             OnModelCreatingPartial(modelBuilder);

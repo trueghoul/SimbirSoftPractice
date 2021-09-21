@@ -1,4 +1,5 @@
-﻿using SimbirSoftPractice.EF;
+﻿using SimbirSoftPractice.DTOs;
+using SimbirSoftPractice.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,10 @@ namespace SimbirSoftPractice.Repositories
 {
     public interface IPersonRepository : IRepository<Person>
     {
-        
+        Person ToPersonMap(PersonDTO person);
+        Person GetPerson(int id);
+        void EditPerson(PersonDTO person);
+        void DeletePerson(int id);
+        void DeletePerson(string fullName);
     }
 }
