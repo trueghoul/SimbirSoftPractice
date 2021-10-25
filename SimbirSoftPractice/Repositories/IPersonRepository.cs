@@ -1,5 +1,5 @@
-﻿using SimbirSoftPractice.DTOs;
-using SimbirSoftPractice.EF;
+﻿using SimbirSoftPractice.Models;
+using SimbirSoftPractice.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace SimbirSoftPractice.Repositories
 {
-    public interface IPersonRepository : IRepository<Person>
+    public interface IPersonRepository : IGenericRepository<Person>
     {
-        Person ToPersonMap(PersonDTO person);
-        Person GetPerson(int id);
-        void EditPerson(PersonDTO person);
-        void DeletePerson(int id);
-        void DeletePerson(string fullName);
+        List<LibraryCard> GetLibraryCards(int personId);
+        LibraryCard AddLibraryCard(int personId, int bookId);
+        void RemoveLibraryCard(int personId, int bookId);
     }
 }

@@ -2,84 +2,75 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-#nullable disable
-
-namespace SimbirSoftPractice.EF
+namespace SimbirSoftPractice.Entites
 {
-    public partial class LibraryDBContext : DbContext
+    public class LibraryDBContext : DbContext
     {
-        public LibraryDBContext()
-        {
-        }
-
         public LibraryDBContext(DbContextOptions<LibraryDBContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<Author> Authors { get; set; }
-        public virtual DbSet<Book> Books { get; set; }
-        public virtual DbSet<BookGenre> BookGenres { get; set; }
-        public virtual DbSet<Genre> Genres { get; set; }
-        public virtual DbSet<LibraryCard> LibraryCards { get; set; }
-        public virtual DbSet<Person> People { get; set; }
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<BookGenre> BookGenres { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<LibraryCard> LibraryCards { get; set; }
+        public DbSet<Person> Persons { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Name=LibraryDB");
+
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
-
             modelBuilder.Entity<Author>(entity =>
             {
                 entity.ToTable("author");
 
+                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
-                    .HasMaxLength(50)
                     .HasColumnName("first_name");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
-                    .HasMaxLength(50)
                     .HasColumnName("last_name");
 
                 entity.Property(e => e.MiddleName)
-                    .HasMaxLength(10)
-                    .HasColumnName("middle_name")
-                    .IsFixedLength(true);
+                    .HasColumnName("middle_name");
             });
 
             modelBuilder.Entity<Book>(entity =>
             {
                 entity.ToTable("book");
 
+                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
-                entity.Property(e => e.AuthorId).HasColumnName("author_id");
+                entity.Property(e => e.AuthorId)
+                    .IsRequired()
+                    .HasColumnName("author_id");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(50)
                     .HasColumnName("name");
 
                 entity.HasOne(d => d.Author)
                     .WithMany(p => p.Books)
-                    .HasForeignKey(d => d.AuthorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_book_author");
+                    .HasForeignKey(d => d.AuthorId);
             });
 
             modelBuilder.Entity<BookGenre>(entity =>
@@ -88,34 +79,33 @@ namespace SimbirSoftPractice.EF
 
                 entity.ToTable("book_genre");
 
-                entity.Property(e => e.BookId).HasColumnName("book_id");
+                entity.Property(e => e.BookId)
+                    .HasColumnName("book_id");
 
-                entity.Property(e => e.GenreId).HasColumnName("genre_id");
+                entity.Property(e => e.GenreId)
+                    .HasColumnName("genre_id");
 
                 entity.HasOne(d => d.Book)
                     .WithMany(p => p.BookGenres)
-                    .HasForeignKey(d => d.BookId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_book_genre_book");
+                    .HasForeignKey(d => d.BookId);
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.BookGenres)
-                    .HasForeignKey(d => d.GenreId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_book_genre_genre");
+                    .HasForeignKey(d => d.GenreId);
             });
 
             modelBuilder.Entity<Genre>(entity =>
             {
                 entity.ToTable("genre");
 
+                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.GenreName)
                     .IsRequired()
-                    .HasMaxLength(50)
                     .HasColumnName("genre_name");
             });
 
@@ -131,23 +121,21 @@ namespace SimbirSoftPractice.EF
 
                 entity.HasOne(d => d.Book)
                     .WithMany(p => p.LibraryCards)
-                    .HasForeignKey(d => d.BookId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_library_card_book");
+                    .HasForeignKey(d => d.BookId);
 
                 entity.HasOne(d => d.Person)
                     .WithMany(p => p.LibraryCards)
-                    .HasForeignKey(d => d.PersonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_library_card_person");
+                    .HasForeignKey(d => d.PersonId);
             });
 
             modelBuilder.Entity<Person>(entity =>
             {
                 entity.ToTable("person");
 
+                entity.HasKey(e => e.Id);
+
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .ValueGeneratedOnAdd()
                     .HasColumnName("id");
 
                 entity.Property(e => e.BirhDate)
@@ -156,22 +144,15 @@ namespace SimbirSoftPractice.EF
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
-                    .HasMaxLength(50)
                     .HasColumnName("first_name");
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
-                    .HasMaxLength(50)
                     .HasColumnName("last_name");
 
                 entity.Property(e => e.MiddleName)
-                    .HasMaxLength(50)
                     .HasColumnName("middle_name");
             });
-
-            OnModelCreatingPartial(modelBuilder);
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

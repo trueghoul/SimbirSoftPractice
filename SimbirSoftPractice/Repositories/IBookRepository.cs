@@ -1,4 +1,4 @@
-﻿using SimbirSoftPractice.EF;
+﻿using SimbirSoftPractice.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SimbirSoftPractice.Repositories
 {
-    public interface IBookRepository : IRepository<Book>
+    public interface IBookRepository : IGenericRepository<Book>
     {
 
     }

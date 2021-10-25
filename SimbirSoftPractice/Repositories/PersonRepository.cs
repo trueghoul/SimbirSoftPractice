@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SimbirSoftPractice.DTOs;
-using SimbirSoftPractice.EF;
+using SimbirSoftPractice.Models;
+using SimbirSoftPractice.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,54 +9,42 @@ using System.Threading.Tasks;
 
 namespace SimbirSoftPractice.Repositories
 {
-    public class PersonRepository : Repository<Person>, IPersonRepository 
+    public class PersonRepository : GenericRepository<Person>, IPersonRepository 
     {
         public PersonRepository(LibraryDBContext context)
             :base(context)
         {
 
         }
-        public LibraryDBContext LibraryDBContext
-        {
-            get { return Context as LibraryDBContext; }
-        }
 
-        public void DeletePerson(int id)
+        public List<LibraryCard> GetLibraryCards(int personId)
         {
-            LibraryDBContext.People.Remove(GetPerson(id));
+            return _context.LibraryCards
+                .Where(lc => lc.PersonId == personId)
+                .Include(lc => lc.Book)
+                    .ThenInclude(b => b.Author)
+                .Include(lc => lc.Book)
+                    .ThenInclude(b => b.BookGenres)
+                    .ThenInclude(bg => bg.Genre)
+                .ToList();
         }
-
-        public void DeletePerson(string fullName)
+        public LibraryCard AddLibraryCard(int personId, int bookId)
         {
-            LibraryDBContext.People.RemoveRange(GetPerson(fullName));
-        }
-
-        public void EditPerson(PersonDTO person)
-        {
-            LibraryDBContext.People.Remove(LibraryDBContext.People.Where(p => p.Id == person.Id).FirstOrDefault());
-            LibraryDBContext.People.Add(ToPersonMap(person));
-        }
-
-        public Person GetPerson(int id)
-        {
-            return LibraryDBContext.People.Where(p => p.Id == id).FirstOrDefault();
-        }
-
-        public IEnumerable<Person> GetPerson(string fullName)
-        {
-            return LibraryDBContext.People.Where(p => (p.FirstName + ' ' + p.LastName + ' ' + p.MiddleName).Contains(fullName));
-        }
-
-        public Person ToPersonMap(PersonDTO person)
-        {
-            return new Person
+            var libraryCard = new LibraryCard
             {
-                Id = person.Id,
-                BirhDate = person.BirhDate,
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-                MiddleName = person.MiddleName
+                PersonId = personId,
+                BookId = bookId
             };
+            _context.LibraryCards.Add(libraryCard);
+            _context.SaveChanges();
+            return libraryCard;
+        }
+
+        public void RemoveLibraryCard(int personId, int bookId)
+        {
+            var libraryCard = _context.LibraryCards.Where(lc => lc.PersonId == personId && lc.BookId == bookId).FirstOrDefault();
+            _context.LibraryCards.Remove(libraryCard);
+            _context.SaveChanges();
         }
     }
 }

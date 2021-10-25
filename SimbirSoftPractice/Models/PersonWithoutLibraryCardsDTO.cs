@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace SimbirSoftPractice.EF
+namespace SimbirSoftPractice.Models
 {
-    public partial class Person
+    public class PersonWithoutLibraryCardsDTO
     {
-        public Person()
-        {
-            LibraryCards = new HashSet<LibraryCard>();
-        }
-
         public int Id { get; set; }
         public DateTime BirhDate { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
-
-        public virtual ICollection<LibraryCard> LibraryCards { get; set; }
     }
 }

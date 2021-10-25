@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SimbirSoftPractice.DTOs
+
+namespace SimbirSoftPractice.Entites
 {
-    public class PersonDTO
+    public class Person
     {
         public int Id { get; set; }
         public DateTime BirhDate { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
+
+        public ICollection<LibraryCard> LibraryCards { get; set; }
     }
 }

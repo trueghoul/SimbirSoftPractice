@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SimbirSoftPractice.DTOs;
-using SimbirSoftPractice.EF;
+using Microsoft.EntityFrameworkCore;
+using SimbirSoftPractice.Entites;
+using SimbirSoftPractice.Models;
 using SimbirSoftPractice.Repositories;
+using SimbirSoftPractice.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,52 +20,61 @@ namespace SimbirSoftPractice.Controllers
     public class PersonController
     {
 
-        private UnitOfWork unitOfWork;
+        private readonly IPersonService _personService;
+        public LibraryDBContext _context;
 
-        public PersonController(LibraryDBContext db)
+        public PersonController(IPersonService personService,
+            LibraryDBContext context)
         {
-            unitOfWork = new UnitOfWork(db);
+            _context = context;
+            _personService = personService;
         }
 
-        [HttpPost]
-        public Person AddPerson([FromBody] PersonDTO person)
+        [HttpGet(template: "GetAllPersons")]
+        public IEnumerable<PersonWithoutLibraryCardsDTO> GetAll()
         {
-            var pers = unitOfWork.Persons.ToPersonMap(person);
-            unitOfWork.Persons.Add(pers);
-            unitOfWork.Complete();
-            return unitOfWork.Persons.GetPerson(pers.Id);
+            return _personService.GetAllPersons();
         }
 
-        [HttpPut]
-        public Person EditPerson([FromBody] PersonDTO person)
+        [HttpPost(template:"AddPerson")]
+        public PersonWithoutLibraryCardsDTO Add([FromQuery] DateTime birthDate, string firstName, string lastName, string middleName)
         {
-            unitOfWork.Persons.EditPerson(person);
-            unitOfWork.Complete();
-            return unitOfWork.Persons.GetPerson(person.Id);
+            return _personService.AddPerson(birthDate, firstName, lastName, middleName);
         }
 
-        [HttpDelete(template: "byID")]
-        public ActionResult DeletePersonById([FromQuery] int id)
+        [HttpPut(template:"EditPerson")]
+        public PersonWithoutLibraryCardsDTO Edit([FromBody] PersonWithoutLibraryCardsDTO person)
         {
-            try
-            {
-                unitOfWork.Persons.DeletePerson(id);
-                unitOfWork.Complete();
-            }
-            catch { return new StatusCodeResult(404); }
-            return new StatusCodeResult(204);
+            return _personService.EditPerson(person);
         }
-
-        [HttpDelete(template: "byFullName")]
-        public ActionResult DeletePersonByFullName([FromQuery] string fullName)
+        [HttpDelete(template:"RemovePerson")]
+        public ActionResult RemoveById([FromQuery] int userId)
         {
-            try
-            {
-                unitOfWork.Persons.DeletePerson(fullName);
-                unitOfWork.Complete();
-            }
-            catch { return new StatusCodeResult(404); }
-            return new StatusCodeResult(204);
+            if (_personService.RemovePersonById(userId))
+                return new StatusCodeResult(204);
+            else return new StatusCodeResult(404);
+        }
+        [HttpDelete(template:"RemovePersonByFullName")]
+        public ActionResult RemoveByFullName([FromQuery] string firstName, string lastName, string middleName)
+        {
+            if (_personService.RemovePersonByFullName(firstName, lastName, middleName))
+                return new StatusCodeResult(204);
+            else return new StatusCodeResult(404);
+        }
+        [HttpGet(template:"GetPersonBooks")]
+        public IEnumerable<LibraryCardWithoutPersonDTO> GetPersonBooks([FromQuery] int userId)
+        {
+            return _personService.GetPersonBooks(userId);
+        }
+        [HttpPost(template:"AddPersonBook")]
+        public LibraryCardDTO AddPersonBook([FromQuery] int personId, int bookId)
+        {
+            return _personService.AddPersonBook(personId, bookId);
+        }
+        [HttpDelete(template: "RemovePersonBook")]
+        public void RempovePersonBook([FromQuery] int personId, int bookId)
+        {
+            _personService.RemovePersonBook(personId, bookId);
         }
 
     }

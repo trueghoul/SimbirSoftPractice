@@ -1,4 +1,4 @@
-﻿using SimbirSoftPractice.EF;
+﻿using SimbirSoftPractice.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +7,12 @@ using System.Threading.Tasks;
 
 namespace SimbirSoftPractice.Repositories
 {
-    public class BookRepository : Repository<Book>, IBookRepository
+    public class BookRepository : GenericRepository<Book>, IBookRepository
     {
         public BookRepository(LibraryDBContext context)
             :base(context)
         {
 
-        }
-        public LibraryDBContext LibraryDBContext
-        {
-            get { return Context as LibraryDBContext; }
         }
     }
 }
