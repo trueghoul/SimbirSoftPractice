@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SimbirSoftPractice.Entites;
+using SimbirSoftPractice.Models;
+using SimbirSoftPractice.Repositories;
+using SimbirSoftPractice.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,29 +16,12 @@ namespace SimbirSoftPractice.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class BookController : ControllerBase
+    public class BookController
     {
-
-        [HttpGet]
-        public IEnumerable<Book> GetBooks([FromQuery] int? AuthorId)
+        private readonly IBookService _bookService;
+        public BookController(IBookService bookService)
         {
-            if (AuthorId != null)
-            {
-                return FakeRepository.Books.Where(p => p.AuthorId == AuthorId);
-            }
-            else return FakeRepository.Books;
-        }
-
-        [HttpPost]
-        public void AddBook([FromBody] Book book)
-        {
-            FakeRepository.Books.Add(book);
-        }
-
-        [HttpDelete]
-        public void RemoveBook([FromQuery] int id)
-        {
-            FakeRepository.Books.Remove(FakeRepository.Books.Find(p => p.Id == id));
+            _bookService = bookService;
         }
     }
 }
