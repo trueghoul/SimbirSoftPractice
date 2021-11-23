@@ -21,29 +21,26 @@ namespace SimbirSoftPractice.Controllers
     {
 
         private readonly IPersonService _personService;
-        public LibraryDBContext _context;
 
-        public PersonController(IPersonService personService,
-            LibraryDBContext context)
+        public PersonController(IPersonService personService)
         {
-            _context = context;
             _personService = personService;
         }
 
         [HttpGet(template: "GetAllPersons")]
-        public IEnumerable<PersonWithoutLibraryCardsDTO> GetAll()
+        public IEnumerable<PersonDTO> GetAll()
         {
             return _personService.GetAllPersons();
         }
 
         [HttpPost(template:"AddPerson")]
-        public PersonWithoutLibraryCardsDTO Add([FromQuery] DateTime birthDate, string firstName, string lastName, string middleName)
+        public PersonDTO Add([FromQuery] DateTime birthDate, string firstName, string lastName, string middleName)
         {
             return _personService.AddPerson(birthDate, firstName, lastName, middleName);
         }
 
         [HttpPut(template:"EditPerson")]
-        public PersonWithoutLibraryCardsDTO Edit([FromBody] PersonWithoutLibraryCardsDTO person)
+        public PersonDTO Edit([FromBody] PersonDTO person)
         {
             return _personService.EditPerson(person);
         }

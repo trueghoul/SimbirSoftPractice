@@ -10,9 +10,9 @@ namespace SimbirSoftPractice.Services
 {
     public interface IPersonService
     {
-        IEnumerable<PersonWithoutLibraryCardsDTO> GetAllPersons();
-        PersonWithoutLibraryCardsDTO AddPerson(DateTime birthDate, string firstName, string lastName, string middleName);
-        PersonWithoutLibraryCardsDTO EditPerson(PersonWithoutLibraryCardsDTO person);
+        IEnumerable<PersonDTO> GetAllPersons();
+        PersonDTO AddPerson(DateTime birthDate, string firstName, string lastName, string middleName);
+        PersonDTO EditPerson(PersonDTO person);
         bool RemovePersonById(int personId);
         bool RemovePersonByFullName(string firstName, string lastName, string middleName);
         IEnumerable<LibraryCardWithoutPersonDTO> GetPersonBooks(int personId);

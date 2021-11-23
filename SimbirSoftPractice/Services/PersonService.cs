@@ -14,26 +14,14 @@ namespace SimbirSoftPractice.Services
     {
         private readonly IMapper _mapper;
         private readonly IPersonRepository _personRepository;
-        private readonly IBookRepository _bookRepository;
-        private readonly IGenreRepository _genreRepository;
-        private readonly IAuthorRepository _authorRepository;
-        private readonly LibraryDBContext _context;
         public PersonService(IPersonRepository personRepository,
-            IMapper mapper,
-            IBookRepository bookRepository,
-            IGenreRepository genreRepository,
-            IAuthorRepository authorRepository,
-            LibraryDBContext context)
+            IMapper mapper)
         {
             _personRepository = personRepository;
             _mapper = mapper;
-            _authorRepository = authorRepository;
-            _bookRepository = bookRepository;
-            _genreRepository = genreRepository;
-            _context = context;
         }
 
-        public PersonWithoutLibraryCardsDTO AddPerson(DateTime birthDate, string firstName, string lastName, string middleName)
+        public PersonDTO AddPerson(DateTime birthDate, string firstName, string lastName, string middleName)
         {
             var person = new Person
             {
@@ -43,9 +31,9 @@ namespace SimbirSoftPractice.Services
                 MiddleName = middleName
             };
             _personRepository.Create(person);
-            return _mapper.Map<PersonWithoutLibraryCardsDTO>(person);
+            return _mapper.Map<PersonDTO>(person);
         }
-        public PersonWithoutLibraryCardsDTO EditPerson(PersonWithoutLibraryCardsDTO personDTO)
+        public PersonDTO EditPerson(PersonDTO personDTO)
         {
             var person = _personRepository.FindById(personDTO.Id);
             if (person != null)
@@ -56,7 +44,7 @@ namespace SimbirSoftPractice.Services
                 person.BirhDate = personDTO.BirhDate;
             }
             _personRepository.Update(person);
-            return _mapper.Map<PersonWithoutLibraryCardsDTO>(person);
+            return _mapper.Map<PersonDTO>(person);
         }
 
         public bool RemovePersonById(int personId)
@@ -81,9 +69,9 @@ namespace SimbirSoftPractice.Services
                 return true;
             }
         }
-        public IEnumerable<PersonWithoutLibraryCardsDTO> GetAllPersons()
+        public IEnumerable<PersonDTO> GetAllPersons()
         {
-            return _personRepository.Get().Select(p => _mapper.Map<PersonWithoutLibraryCardsDTO>(p));
+            return _personRepository.Get().Select(p => _mapper.Map<PersonDTO>(p));
         }
 
         public IEnumerable<LibraryCardWithoutPersonDTO> GetPersonBooks(int personId)

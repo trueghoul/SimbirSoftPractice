@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimbirSoftPractice.Models
 {
-    public class PersonWithoutLibraryCardsDTO
+    public class PersonDTO
     {
         public int Id { get; set; }
         public DateTime BirhDate { get; set; }

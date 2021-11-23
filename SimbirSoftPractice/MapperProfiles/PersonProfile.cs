@@ -13,8 +13,8 @@ namespace SimbirSoftPractice.MapperProfiles
     {
         public PersonProfile()
         {
-            CreateMap<Person, PersonWithoutLibraryCardsDTO>();
-            CreateMap<PersonWithoutLibraryCardsDTO, Person>();
+            CreateMap<Person, PersonDTO>();
+            CreateMap<PersonDTO, Person>();
         }
     }
 }

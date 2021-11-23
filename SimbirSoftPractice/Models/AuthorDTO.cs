@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimbirSoftPractice.Models
 {
-    public class AuthorWithoutBooksDTO
+    public class AuthorDTO
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

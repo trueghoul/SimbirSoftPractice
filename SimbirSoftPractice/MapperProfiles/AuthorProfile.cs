@@ -13,8 +13,8 @@ namespace SimbirSoftPractice.MapperProfiles
     {
         public AuthorProfile()
         {
-            CreateMap<AuthorWithoutBooksDTO, Author>();
-            CreateMap<Author, AuthorWithoutBooksDTO>();
+            CreateMap<AuthorDTO, Author>();
+            CreateMap<Author, AuthorDTO>();
         }
     }
 }
